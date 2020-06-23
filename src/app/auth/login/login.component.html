@@ -1,0 +1,52 @@
+<nz-layout class="layout">
+  <!-- <nz-header>
+    <div class="logo"></div>
+    <ul nz-menu nzTheme="dark" nzMode="horizontal">
+      <li nz-menu-item>nav 1</li>
+      <li nz-menu-item>nav 2</li>
+      <li nz-menu-item>nav 3</li>
+    </ul>
+  </nz-header> -->
+  <nz-content>
+    <div class="inner-content">
+      <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
+        <nz-form-item>
+          <img src="../../../assets/icons/pb_logo_color.svg" alt="logo">
+        </nz-form-item>
+        <nz-form-item class="intro">
+          <h2 nz-title>File Manager</h2>
+          <p nz-text nzType="secondary">Sharing files and documents in a better way</p>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-control nzErrorTip="请输入用户名">
+            <nz-input-group nzPrefixIcon="user">
+              <input type="text" nz-input formControlName="userName" placeholder="用户名" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-control nzErrorTip="请输入密码">
+            <nz-input-group nzPrefixIcon="lock">
+              <input type="password" nz-input formControlName="password" placeholder="密码" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-alert *ngIf="loginError" nzType="error" nzMessage="用户名或密码错误，请重试" nzShowIcon></nz-alert>
+        <nz-form-item>
+          <nz-form-control>
+            <label nz-checkbox formControlName="remember">
+              <span>自动登录</span>
+            </label>
+            <a class="login-form-forgot" class="login-form-forgot">忘记密码</a>
+            <button nz-button class="login-form-button" [nzType]="'primary'" [nzLoading]="loginInProcess">登录</button>
+            Or
+            <a>register now!</a>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+
+    </div>
+  </nz-content>
+  <nz-footer>CIeNET ©2019-2020 Designed and Developed By <a href="mailto:Shawn.Shi@pb.com">Shawn</a> & <a
+      href="mailto:ke.liao@cienet.com.cn">Rick</a> with <i nz-icon nzType="heart" nzTheme="fill"></i></nz-footer>
+</nz-layout>

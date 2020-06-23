@@ -1,0 +1,98 @@
+@import "../../styles.less";
+
+::ng-deep .cdk-drag-preview {
+  display: table;
+}
+
+::ng-deep .cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.ant-table-thead > tr,
+.ant-table-tbody > tr {
+  // transition: none;
+  &.@{table-prefix-cls}-row-hover,
+  &:hover {
+    &:not(.@{table-prefix-cls}-expanded-row):not(.@{table-prefix-cls}-row-selected) > td {
+      background: @table-row-hover-bg;
+    }
+  }
+  &.@{table-prefix-cls}-row-selected > td {
+    &.@{table-prefix-cls}-column-sort {
+      background: @table-body-selected-sort-bg;
+    }
+  }
+  &:hover {
+    &.@{table-prefix-cls}-row-selected > td {
+      background: @table-selected-row-hover-bg;
+      &.@{table-prefix-cls}-column-sort {
+        background: @table-body-selected-sort-bg;
+      }
+    }
+  }
+}
+
+nz-breadcrumb.file-path {
+  margin-bottom: @padding-md;
+}
+
+tr {
+  transition: none;
+}
+
+.td-filename {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  i {
+    padding-right: @padding-md;
+    cursor: pointer;
+  }
+  span {
+    cursor: pointer;
+  }
+}
+
+tr {
+  &.being-dragged {
+    background: green;
+    &:hover {
+      background: green;
+    }
+  }
+  i {
+    img {
+      width: 36px;
+      height: 36px;
+    }
+  }
+}
+
+img {
+  &.unknown {
+    content: url("../../assets/icons/icon-nor-m.svg");
+  }
+  &.zip {
+    content: url("../../assets/icons/icon-zip-m.svg");
+  }
+  &.ppt {
+    content: url("../../assets/icons/icon-ppt-m.svg");
+  }
+  &.word {
+    content: url("../../assets/icons/icon-doc-m.svg");
+  }
+  &.excel {
+    content: url("../../assets/icons/icon-xls-m.svg");
+  }
+  &.folder,
+  &.department {
+    content: url("../../assets/icons/folder-closed.svg");
+    &.active {
+      content: url("../../assets/icons/folder-open.svg");
+    }
+  }
+}
+
+cdk-virtual-scroll-viewport.ant-table-body {
+  overflow: hidden;
+}
