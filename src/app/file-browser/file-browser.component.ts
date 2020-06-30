@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, OnDestroy, AfterViewInit, ElementRef } from '@angular/core';
 import { NzTableComponent, NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd';
-import { Subject, merge, concat, forkJoin, Observable, of } from 'rxjs';
+import { Subject, merge, concat, forkJoin, Observable, of, fromEvent, Subscription } from 'rxjs';
 import { takeUntil, switchMap, mergeMap, exhaustMap } from 'rxjs/operators';
 import { Node, NodeInfo, FileBrowserService } from './file-browser.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -30,6 +30,9 @@ export class FileBrowserComponent implements OnInit {
   currentPath: string[] = ['全部'];
   environment = environment;
   isLoading = true;
+  dragImageStyles = {} as { top: string, left: string, visibility: string };
+  mouseMoveObs: Observable<Event>;
+  mouseMoveSubscription: Subscription;
 
   ngOnInit(): void {
     this.route.params.pipe(switchMap(params => {
@@ -63,6 +66,11 @@ export class FileBrowserComponent implements OnInit {
     }, () => {
       console.log(this.isLoading);
     });
+
+    this.mouseMoveObs = fromEvent(document, 'mousemove');
+    // this.mouseMoveSubscription = this.mouseMoveObs.subscribe(e => {
+    //   console.log(e);
+    // })
   }
 
   getIconClass(data: Node, isActive?: boolean) {
@@ -82,45 +90,69 @@ export class FileBrowserComponent implements OnInit {
     // });
   }
 
-  cdkDrag(event) {
+  // cdkDrag(event) {
+  //   console.log(event);
+  // }
+
+  // cdkDropListEntered(event, data: Node) {
+  //   console.log(event, data.id);
+  // }
+
+  onMouseDown(event: MouseEvent) {
     console.log(event);
   }
 
-  cdkDropListEntered(event, data: Node) {
-    console.log(event, data.id);
-  }
-
-
   drag(event: DragEvent, data: Node) {
-    event.dataTransfer.setData('id', data.id.toString());
+    var img = document.createElement("img");
+    img.src = "http://kryogenix.org/images/hackergotchi-simpler.png";
+
+    event.dataTransfer.setData("application/pb.file.manager.node", data.id.toString());
+    event.dataTransfer.setData("text/plain", data.id.toString());
+    event.dataTransfer.setDragImage(new Image(), 0, 0);
+    // event.dataTransfer.setData('id', data.id.toString());
     data.isBeingDragged = true;
+    // console.log('drag - ', data);
   }
 
-  dragEnter(event, data: Node) {
-    // console.log('dragEnter', index, data);
-  }
+  // dragEnter(event, data: Node) {
+  //   // console.log('dragEnter', index, data);
+  // }
 
-  dragLeave(event, data: Node) {
-    // console.log('dragLeave', index, data);
-    this.dragOverItemId = -1;
-  }
+  // dragLeave(event, data: Node) {
+  //   // console.log('dragLeave', index, data);
+  //   this.dragOverItemId = -1;
+  // }
 
-  drop(event: DragEvent, data: Node) {
-    event.preventDefault();
-    this.dragOverItemId = -1;
-    console.log(event.dataTransfer.getData('id'), data);
-  }
-
-  dragOver(event: DragEvent, data: Node) {
-    event.preventDefault();
-    if (this.dragOverItemId !== data.id) {
-      this.dragOverItemId = data.id;
+  dragOver(event: DragEvent) {
+    const isNode = event.dataTransfer.types.includes("application/pb.file.manager.node");
+    // console.log('dragover', event);
+    this.dragImageStyles.visibility = 'visible';
+    this.dragImageStyles.left = event.pageX + 30 + 'px';
+    this.dragImageStyles.top = event.pageY + 30 + 'px';
+    if (isNode) {
+      event.preventDefault();
     }
+    // event.preventDefault();
+    // if (this.dragOverItemId !== data.id) {
+    //   this.dragOverItemId = data.id;
+    // }
   }
 
-  dragEnd(event: DragEvent, data: Node) {
-    this.dragOverItemId = -1;
+  dragLeave(event) {
+    console.log(event);
+    this.dragImageStyles.visibility = 'hidden';
   }
+
+  drop(event: DragEvent) {
+    // this.dragOverItemId = -1;
+    console.log(event.dataTransfer.getData('application/pb.file.manager.node'));
+    this.dragImageStyles.visibility = 'hidden';
+    event.preventDefault();
+  }
+
+  // dragEnd(event: DragEvent, data: Node) {
+  //   this.dragOverItemId = -1;
+  // }
 
   sort(event) {
     console.log(event);
