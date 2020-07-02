@@ -15,7 +15,7 @@ import * as PhotoSwipeUI_Default from 'photoswipe/dist/photoswipe-ui-default';
 })
 export class FileBrowserComponent implements OnInit {
 
-  @ViewChild('photoSwipe', { static: false }) photoSwipe: ElementRef;
+  @ViewChild('photoSwipe') photoSwipe: ElementRef;
 
   constructor(
     private nzContextMenuService: NzContextMenuService,
