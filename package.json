@@ -23,7 +23,7 @@
     "@auth0/angular-jwt": "^3.0.1",
     "@types/photoswipe": "^4.0.29",
     "install": "^0.13.0",
-    "ng-zorro-antd": "^8.5.0",
+    "ng-zorro-antd": "^9.2.2",
     "ngx-cookie-service": "^2.2.0",
     "npm": "^6.13.1",
     "photoswipe": "^4.1.3",
