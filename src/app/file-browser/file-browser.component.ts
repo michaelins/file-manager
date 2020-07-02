@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, OnDestroy, AfterViewInit, ElementRef } from '@angular/core';
-import { NzTableComponent, NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd';
+import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd';
+import { NzTableComponent } from 'ng-zorro-antd/table';
 import { Subject, merge, concat, forkJoin, Observable, of, fromEvent, Subscription } from 'rxjs';
 import { takeUntil, switchMap, mergeMap, exhaustMap } from 'rxjs/operators';
 import { Node, NodeInfo, FileBrowserService } from './file-browser.service';
@@ -7,6 +8,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 import * as PhotoSwipe from 'photoswipe';
 import * as PhotoSwipeUI_Default from 'photoswipe/dist/photoswipe-ui-default';
+
+interface Person {
+  key: string;
+  name: string;
+  age: number;
+  address: string;
+}
 
 @Component({
   selector: 'app-file-browser',

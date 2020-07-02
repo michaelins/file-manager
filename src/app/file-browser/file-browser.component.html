@@ -29,12 +29,13 @@
 </nz-dropdown-menu>
 
 <!-- <nz-empty></nz-empty> -->
+
 <nz-table
   [nzData]="currentNodes"
   [nzFrontPagination]="false"
   [nzShowPagination]="false"
-  [nzScroll]="{ y: 'calc(100vh - 251px)' }"
   [nzLoading]="isLoading"
+  [nzScroll]="{ y: 'calc(100vh - 251px)' }"
 >
   <thead (nzSortChange)="sort($event)" nzSingleSort>
     <tr>
@@ -45,7 +46,6 @@
     </tr>
   </thead>
 
-  <!-- <tbody cdkDropList cdkDropListSortingDisabled="true"> -->
   <tbody
     (dragover)="dragOver($event)"
     (dragenter)="dragOver($event)"
@@ -58,23 +58,7 @@
       (drop)="drop($event)"
       (contextmenu)="contextMenu($event, menu)"
     >
-      <!-- <tr *ngFor="let data of currentNodes" draggable="true" (dragstart)="drag($event, data)"
-      (dragover)="dragOver($event, data)" (drop)="drop($event, data)" (dragenter)="dragEnter($event, data)"
-      (dragleave)="dragLeave($event, data)" (dragend)="dragEnter($event, data)" (contextmenu)="contextMenu($event, menu)"
-      [ngClass]="{'being-dragged':data.isBeingDragged}"> -->
-
-      <!-- <tr *ngFor="let data of currentNodes" [id]="data.id" (contextmenu)="contextMenu($event, menu)" cdkDrag
-      (mouseup)="cdkDropListEntered($event,data)" (mouseenter)="cdkDropListEntered($event,data)" style="opacity: 1;"> -->
-
       <td nzShowCheckbox></td>
-      <!--
-      <div *cdkDragPreview class="td-filename">
-        <i nz-icon (click)="openFolder(data.id)">
-          <img [ngClass]="getIconClass(data, dragOverItemId===data.id)" *ngIf="data.header !== 'img'">
-          <img [src]="environment.apiServer+'/file/'+data.id" *ngIf="data.header === 'img'">
-        </i>
-        <span (click)="openFolder(data.id)">{{ data.dataBox.name }}</span>
-      </div> -->
 
       <td class="td-filename" id="ghostimage">
         <i nz-icon (click)="openFolder(data.id)">
@@ -91,24 +75,6 @@
       </td>
       <td>{{ data.dataBox.updateTime }}</td>
       <td>{{ data.header }}</td>
-
-      <!-- </tr> -->
-
-      <!-- <tr *cdkDragPlaceholder style="opacity: 0;">
-
-      <td nzShowCheckbox></td>
-
-      <td class="td-filename">
-        <i nz-icon>
-        </i>
-        <span>awefaef</span>
-
-      </td>
-      <td></td>
-      <td></td>
-
-
-    </tr>  -->
     </tr>
   </tbody>
 </nz-table>

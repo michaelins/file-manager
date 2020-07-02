@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
-import { NzModalRef, NzModalService, NzNotificationService, NzConfigService } from 'ng-zorro-antd';
+import { NzModalRef, NzModalService, NzConfigService } from 'ng-zorro-antd';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { AuthService, User } from '../auth/auth.service';
 import { MoveToComponent } from '../modals/move-to/move-to.component';
 import { UploadXHRArgs, UploadFile } from 'ng-zorro-antd/upload';
@@ -66,7 +67,7 @@ export class PagesComponent implements OnInit {
     this.configService.set("notification", { nzPlacement: 'bottomRight' });
     this.notificationService.template(this.uploadProgressTemplate, {
       nzKey: 'uploadProgress',
-      nzData: this.uploadList,
+      nzData: [...this.uploadList],
       nzDuration: 0,
       nzStyle: {
         width: '600px',
@@ -242,7 +243,7 @@ export class PagesComponent implements OnInit {
         },
         {
           label: '取消',
-          shape: 'default',
+          shape: 'round',
           onClick: () => modal.destroy()
         }
       ]
