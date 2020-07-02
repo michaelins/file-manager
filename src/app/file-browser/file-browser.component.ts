@@ -30,7 +30,7 @@ export class FileBrowserComponent implements OnInit {
   currentPath: string[] = ['全部'];
   environment = environment;
   isLoading = true;
-  dragImageStyles = {} as { top: string, left: string, visibility: string };
+  dragImageStyles = {} as { top: string, left: string, visibility: string, display: string };
   mouseMoveObs: Observable<Event>;
   mouseMoveSubscription: Subscription;
 
@@ -127,6 +127,7 @@ export class FileBrowserComponent implements OnInit {
     const isNode = event.dataTransfer.types.includes("application/pb.file.manager.node");
     // console.log('dragover', event);
     this.dragImageStyles.visibility = 'visible';
+    this.dragImageStyles.display = 'block';
     this.dragImageStyles.left = event.pageX + 30 + 'px';
     this.dragImageStyles.top = event.pageY + 30 + 'px';
     if (isNode) {
@@ -140,13 +141,16 @@ export class FileBrowserComponent implements OnInit {
 
   dragLeave(event) {
     console.log(event);
-    this.dragImageStyles.visibility = 'hidden';
+    // this.dragImageStyles.visibility = 'hidden';
+    this.dragImageStyles.display = 'none';
+
   }
 
   drop(event: DragEvent) {
     // this.dragOverItemId = -1;
     console.log(event.dataTransfer.getData('application/pb.file.manager.node'));
-    this.dragImageStyles.visibility = 'hidden';
+    // this.dragImageStyles.visibility = 'hidden';
+    this.dragImageStyles.display = 'none';
     event.preventDefault();
   }
 

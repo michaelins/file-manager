@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpRequest } from '@angular/common/http';
 import { EqualObject, SortObject } from '../shared/common-interfaces/common-interfaces';
 import { environment } from 'src/environments/environment';
 
@@ -31,6 +31,21 @@ export interface NodeInfo {
   updateTime: string;
 }
 
+export interface SignResp {
+  status: SignStatus;
+  hashKey: string;
+  category: string
+}
+
+export interface UploadResp {
+  id: string;
+}
+
+export enum SignStatus {
+  NEW = 'NEW',
+  EXIST = 'EXIST'
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -59,5 +74,16 @@ export class FileBrowserService {
 
   getNode(id: number) {
     return this.http.get<NodeInfo>(`${environment.apiServer}/node/${id}`);
+  }
+
+  sign(formData: FormData) {
+    return this.http.post<SignResp>(`${environment.apiServer}/node/sign`, formData);
+  }
+
+  upload(formData: FormData) {
+    const req = new HttpRequest('POST', `${environment.apiServer}/node/upload`, formData, {
+      reportProgress: true,
+    });
+    return this.http.request(req);
   }
 }

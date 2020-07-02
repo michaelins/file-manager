@@ -56,6 +56,7 @@
       draggable="true"
       (dragstart)="drag($event, data)"
       (drop)="drop($event)"
+      (contextmenu)="contextMenu($event, menu)"
     >
       <!-- <tr *ngFor="let data of currentNodes" draggable="true" (dragstart)="drag($event, data)"
       (dragover)="dragOver($event, data)" (drop)="drop($event, data)" (dragenter)="dragEnter($event, data)"
@@ -82,7 +83,7 @@
             *ngIf="data.header !== 'img'"
           />
           <img
-            [src]="environment.apiServer + '/file/' + data.id"
+            [src]="environment.apiServer + '/file/thumbnail/' + data.id"
             *ngIf="data.header === 'img'"
           />
         </i>
@@ -191,7 +192,7 @@
     height: 50px;
     position: absolute;
     background: green;
-    visibility: hidden;
+    display: none;
     z-index: 9999;
   "
   [ngStyle]="dragImageStyles"
