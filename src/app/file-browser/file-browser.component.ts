@@ -1,13 +1,10 @@
-import { Component, OnInit, ViewChild, OnDestroy, AfterViewInit, ElementRef } from '@angular/core';
-import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd';
-import { NzTableComponent } from 'ng-zorro-antd/table';
-import { Subject, merge, concat, forkJoin, Observable, of, fromEvent, Subscription } from 'rxjs';
-import { takeUntil, switchMap, mergeMap, exhaustMap } from 'rxjs/operators';
-import { Node, NodeInfo, FileBrowserService } from './file-browser.service';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
+import { forkJoin, fromEvent, Observable, of, Subscription } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
-import * as PhotoSwipe from 'photoswipe';
-import * as PhotoSwipeUI_Default from 'photoswipe/dist/photoswipe-ui-default';
+import { FileBrowserService, Node, NodeInfo } from './file-browser.service';
 
 interface Person {
   key: string;

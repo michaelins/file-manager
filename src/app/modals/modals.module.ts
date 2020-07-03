@@ -1,13 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { MoveToComponent } from './move-to/move-to.component';
+import { NzTreeModule } from 'ng-zorro-antd/tree';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 
 @NgModule({
   declarations: [MoveToComponent],
   imports: [
     CommonModule,
-    NgZorroAntdModule
+    NzTreeModule,
+    NzIconModule
   ],
   entryComponents: [MoveToComponent]
 })

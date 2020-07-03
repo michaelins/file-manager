@@ -31,18 +31,19 @@
 <!-- <nz-empty></nz-empty> -->
 
 <nz-table
+  nzTableLayout="fixed"
   [nzData]="currentNodes"
   [nzFrontPagination]="false"
   [nzShowPagination]="false"
   [nzLoading]="isLoading"
   [nzScroll]="{ y: 'calc(100vh - 251px)' }"
 >
-  <thead (nzSortChange)="sort($event)" nzSingleSort>
+  <thead (nzSortChange)="sort($event)">
     <tr>
-      <th nzWidth="60px" nzShowCheckbox></th>
-      <th nzShowSort nzSortKey="name">名称</th>
-      <th nzShowSort nzSortKey="updatedTime" nzWidth="200px">上次修改时间</th>
-      <th nzShowSort nzSortKey="size" nzWidth="200px">大小</th>
+      <th nzShowCheckbox nzWidth="60px"></th>
+      <th nzShowSort nzWidth="100%">名称</th>
+      <th nzShowSort nzWidth="200px">上次修改时间</th>
+      <th nzShowSort nzWidth="200px">大小</th>
     </tr>
   </thead>
 

@@ -217,13 +217,11 @@ export class AuthService {
   }
 
   autoLogin() {
-    console.log('auto login');
     return from([localStorage.getItem('authData')]).pipe(
       map(storedData => {
         if (!storedData) {
           return null;
         }
-        console.log(storedData);
         const decodedToken = this.jwtHelper.decodeToken(storedData);
         const user = JSON.parse(decodedToken.sub) as User;
         user.token = storedData;
