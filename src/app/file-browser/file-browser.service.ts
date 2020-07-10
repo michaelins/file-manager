@@ -23,12 +23,32 @@ export interface NodeInfo {
   weight: number;
   description: string;
   createAdminId: string;
-  type: string;
-  fileProperties: string;
+  type: NodeType;
+  fileProperties: FileProperty;
   subCategories: string;
   id: number;
   createTime: string;
   updateTime: string;
+}
+
+export interface FileProperty {
+  fileRealName: string;
+  mediaEnum: MediaType;
+  saveType: FileStatus;
+  size: number;
+  suffixEnum: string;
+  images?: ImageResolution;
+  thumbnail?: ThumbnailInfo;
+}
+
+export interface ImageResolution {
+  width: number;
+  height: number;
+}
+
+export interface ThumbnailInfo {
+  thumbnailMapLocation: string;
+  thumbnailSize: number;
 }
 
 export interface SignResp {
@@ -47,9 +67,24 @@ export enum SignStatus {
 }
 
 export enum NodeType {
-  FILE,
-  FOLDER,
-  DEPARTMENT
+  FILE = 'FILE',
+  FOLDER = 'FOLDER',
+  DEPARTMENT = 'DEPARTMENT'
+}
+
+export enum MediaType {
+  WORD = 'WORD',
+  EXCEL = 'EXCEL',
+  PPT = 'PPT',
+  TXT = 'TXT',
+  CSV = 'CSV',
+  IMG = 'IMG',
+  UNKNOWN = 'UNKNOWN'
+}
+
+export enum FileStatus {
+  NORMAL = 'NORMAL',
+  DELETED = 'DELETED'
 }
 
 export interface CreateNodeReq {

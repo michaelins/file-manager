@@ -148,7 +148,7 @@
             <td nzShowCheckbox></td>
 
             <td class="td-filename" id="ghostimage">
-              <i nz-icon (click)="openFolder(data.id)">
+              <i nz-icon (click)="onNodeClick(data)">
                 <img
                   [ngClass]="getIconClass(data, dragOverItemId === data.id)"
                   *ngIf="data.header !== 'img'"
@@ -158,7 +158,7 @@
                   *ngIf="data.header === 'img'"
                 />
               </i>
-              <span (click)="openFolder(data.id)">{{ data.dataBox.name }}</span>
+              <span (click)="onNodeClick(data)">{{ data.dataBox.name }}</span>
             </td>
             <td>{{ data.dataBox.updateTime }}</td>
             <td>{{ data.header }}</td>
@@ -175,14 +175,14 @@
         #photoSwipe
       >
         <!-- Background of PhotoSwipe.
-         It's a separate element as animating opacity is faster than rgba(). -->
+       It's a separate element as animating opacity is faster than rgba(). -->
         <div class="pswp__bg"></div>
 
         <!-- Slides wrapper with overflow:hidden. -->
         <div class="pswp__scroll-wrap">
           <!-- Container that holds slides.
-            PhotoSwipe keeps only 3 of them in the DOM to save memory.
-            Don't modify these 3 pswp__item elements, data is added later on. -->
+          PhotoSwipe keeps only 3 of them in the DOM to save memory.
+          Don't modify these 3 pswp__item elements, data is added later on. -->
           <div class="pswp__container">
             <div class="pswp__item"></div>
             <div class="pswp__item"></div>
@@ -201,7 +201,10 @@
                 title="Close (Esc)"
               ></button>
 
-              <!-- <button class="pswp__button pswp__button--share" title="Share"></button> -->
+              <button
+                class="pswp__button pswp__button--share"
+                title="Share"
+              ></button>
 
               <button
                 class="pswp__button pswp__button--fs"

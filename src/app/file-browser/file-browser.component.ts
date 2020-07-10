@@ -1,10 +1,10 @@
 import { Component, ElementRef, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
-import { forkJoin, fromEvent, Observable, of, Subscription } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { forkJoin, fromEvent, Observable, of, Subscription, from } from 'rxjs';
+import { switchMap, filter, map, toArray } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
-import { FileBrowserService, Node, NodeInfo, SignStatus, CreateNodeReq, NodeType } from './file-browser.service';
+import { FileBrowserService, Node, NodeInfo, SignStatus, CreateNodeReq, NodeType, MediaType } from './file-browser.service';
 import { AuthService, User } from '../auth/auth.service';
 import { UploadXHRArgs, UploadFile } from 'ng-zorro-antd/upload';
 import { HttpEventType, HttpResponse } from '@angular/common/http';
@@ -12,13 +12,8 @@ import { MoveToComponent } from '../modals/move-to/move-to.component';
 import { NzConfigService } from 'ng-zorro-antd/core/config';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzModalService, NzModalRef } from 'ng-zorro-antd/modal';
-
-interface Person {
-  key: string;
-  name: string;
-  age: number;
-  address: string;
-}
+import * as PhotoSwipe from 'photoswipe';
+import * as PhotoSwipeUI_Default from 'photoswipe/dist/photoswipe-ui-default';
 
 @Component({
   selector: 'app-file-browser',
@@ -81,8 +76,8 @@ export class FileBrowserComponent implements OnInit {
         );
       }
     })).subscribe(([nodes, node]) => {
-      // console.log(nodes);
-      // console.log(node);
+      console.log(nodes);
+      console.log(node);
       if (nodes) {
         this.currentNodes = nodes;
       }
@@ -113,9 +108,41 @@ export class FileBrowserComponent implements OnInit {
     }
   }
 
-  openFolder(id: number) {
-    // console.log(id);
-    this.router.navigate(['/pages/folder/', id]);
+  onNodeClick(data: Node) {
+    console.log(data);
+    switch (data.dataBox.type) {
+      case NodeType.DEPARTMENT:
+      case NodeType.FOLDER:
+        this.router.navigate(['/pages/folder/', data.id]);
+        break;
+      case NodeType.FILE:
+        if (data.dataBox.fileProperties.mediaEnum === MediaType.IMG) {
+          from(this.currentNodes).pipe(
+            filter(node => {
+              return (node.dataBox.type === NodeType.FILE && node.dataBox.fileProperties.mediaEnum === MediaType.IMG);
+            }),
+            map(node => {
+              return {
+                src: `${environment.apiServer}/file/${node.id}/insecurity`,
+                msrc: `${environment.apiServer}${node.dataBox.fileProperties.thumbnail.thumbnailMapLocation}`,
+                w: node.dataBox.fileProperties.images.width,
+                h: node.dataBox.fileProperties.images.height,
+                title: node.dataBox.fileProperties.fileRealName
+              };
+            }),
+            toArray()
+          ).subscribe(imgs => {
+            console.log(imgs);
+            const gallery = new PhotoSwipe(this.photoSwipe.nativeElement, PhotoSwipeUI_Default, imgs, {
+              index: 0
+            });
+            gallery.init();
+          });
+        }
+        break;
+      default:
+        break;
+    }
     // this.fileBrowserService.getNodesByParentId(id).subscribe(nodes => {
     //   console.log(nodes);
     //   this.currentNodes = nodes;
