@@ -46,6 +46,21 @@ export enum SignStatus {
   EXIST = 'EXIST'
 }
 
+export enum NodeType {
+  FILE,
+  FOLDER,
+  DEPARTMENT
+}
+
+export interface CreateNodeReq {
+  name: string,
+  description?: string,
+  parentId: number,
+  weight: number,
+  type: NodeType,
+  fileId: string
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -85,5 +100,9 @@ export class FileBrowserService {
       reportProgress: true,
     });
     return this.http.request(req);
+  }
+
+  createFileNode(req: CreateNodeReq) {
+    return this.http.post(`${environment.apiServer}/node`, req);
   }
 }

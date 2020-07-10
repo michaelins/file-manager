@@ -1,5 +1,55 @@
 @import "../../styles.less";
 
+nz-header,
+.ant-layout-header {
+  padding: 0;
+  width: 100%;
+  z-index: 2;
+}
+
+.app-header {
+  background: #fff;
+  height: 64px;
+  padding: 0 @padding-lg;
+  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.header-right {
+  float: right;
+  height: 100%;
+  margin-left: auto;
+  overflow: hidden;
+  .header-account {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 0 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+    .header-account-name {
+      padding: 0 @padding-sm;
+    }
+  }
+}
+
+.btn-margin {
+  margin: 0 @padding-md 0 0;
+}
+
+nz-content {
+  margin: 24px;
+}
+
+.inner-content {
+  padding: 24px;
+  background: #fff;
+  height: 100%;
+}
+
 ::ng-deep .cdk-drag-preview {
   display: table;
 }
@@ -13,7 +63,8 @@
   // transition: none;
   &.@{table-prefix-cls}-row-hover,
   &:hover {
-    &:not(.@{table-prefix-cls}-expanded-row):not(.@{table-prefix-cls}-row-selected) > td {
+    &:not(.@{table-prefix-cls}-expanded-row):not(.@{table-prefix-cls}-row-selected)
+      > td {
       background: @table-row-hover-bg;
     }
   }

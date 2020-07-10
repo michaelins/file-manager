@@ -1,166 +1,300 @@
-<nz-breadcrumb nzSeparator=">" class="file-path">
-  <nz-breadcrumb-item>
-    全部
-  </nz-breadcrumb-item>
-  <nz-breadcrumb-item>
-    <a>Movies</a>
-  </nz-breadcrumb-item>
-  <nz-breadcrumb-item> IMDB250 {{ currentPath }} </nz-breadcrumb-item>
-</nz-breadcrumb>
+<nz-layout style="height: 100vh;">
+  <nz-header>
+    <div class="app-header">
+      <nz-upload
+        nzAction=""
+        [nzMultiple]="true"
+        [nzCustomRequest]="customReq"
+        [nzShowUploadList]="false"
+        (nzChange)="handleChange($event)"
+      >
+        <button nz-button nzType="primary" class="btn-margin">
+          <i nz-icon nzType="cloud-upload" nzTheme="outline"></i>上传
+        </button>
+      </nz-upload>
+      <button nz-button class="btn-margin">
+        <i nz-icon nzType="folder-add" nzTheme="outline"></i>新建文件夹
+      </button>
+      <nz-button-group>
+        <button nz-button>
+          <i nz-icon nzType="cloud-download" nzTheme="outline"></i>下载
+        </button>
+        <button nz-button (click)="createComponentModal()">
+          <i nz-icon nzType="scissor" nzTheme="outline"></i>移动到
+        </button>
+        <button nz-button nz-dropdown [nzDropdownMenu]="menu">
+          <i nz-icon nzType="ellipsis" nzTheme="outline"></i>
+        </button>
+        <nz-dropdown-menu #menu="nzDropdownMenu">
+          <ul nz-menu>
+            <li nz-menu-item>
+              <i nz-icon nzType="share-alt" nzTheme="outline"></i>分享
+            </li>
+            <li nz-menu-item>
+              <i nz-icon nzType="edit" nzTheme="outline"></i>重命名
+            </li>
+            <li nz-menu-item>
+              <i
+                nz-icon
+                nzType="delete"
+                nzTheme="twotone"
+                nzTwotoneColor="#f5222d"
+              ></i
+              >删除
+            </li>
+          </ul>
+        </nz-dropdown-menu>
+      </nz-button-group>
+      <div class="header-right">
+        <span
+          class="header-account"
+          nz-dropdown
+          nzTrigger="click"
+          [nzDropdownMenu]="userAccountMenu"
+        >
+          <!-- <nz-avatar
+          nzIcon="user"
+          [nzSrc]="user ? user.avatar : ''"
+        ></nz-avatar> -->
+          <nz-avatar
+            [nzText]="user.name!.substring(0, 1).toUpperCase()"
+          ></nz-avatar>
+          <span class="header-account-name">{{ user ? user.name : "" }}</span>
+        </span>
+        <nz-dropdown-menu #userAccountMenu="nzDropdownMenu">
+          <ul nz-menu>
+            <li nz-menu-item>
+              <i nz-icon nzType="setting" nzTheme="outline"></i>个人设置
+            </li>
+            <li nz-menu-divider></li>
+            <li nz-menu-item (click)="logout()">
+              <i nz-icon nzType="logout" nzTheme="outline"></i>退出登录
+              {{ this.uploadList.length }}
+            </li>
+          </ul>
+        </nz-dropdown-menu>
+      </div>
+    </div>
+  </nz-header>
+  <nz-content>
+    <div class="inner-content">
+      <nz-breadcrumb nzSeparator=">" class="file-path">
+        <nz-breadcrumb-item>
+          全部
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+          <a>Movies</a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item> IMDB250 {{ currentPath }} </nz-breadcrumb-item>
+      </nz-breadcrumb>
+      <nz-dropdown-menu #menu="nzDropdownMenu">
+        <ul nz-menu>
+          <li nz-menu-item>
+            <i nz-icon nzType="cloud-download" nzTheme="outline"></i>下载
+          </li>
+          <li nz-menu-item>
+            <i nz-icon nzType="share-alt" nzTheme="outline"></i>分享
+          </li>
+          <li nz-menu-item>
+            <i nz-icon nzType="edit" nzTheme="outline"></i>重命名
+          </li>
+          <li nz-menu-item>
+            <i nz-icon nzType="scissor" nzTheme="outline"></i>移动到
+          </li>
+          <li nz-menu-divider></li>
+          <li nz-menu-item>
+            <i
+              nz-icon
+              nzType="delete"
+              nzTheme="twotone"
+              nzTwotoneColor="#f5222d"
+            ></i
+            >删除
+          </li>
+        </ul>
+      </nz-dropdown-menu>
 
-<nz-dropdown-menu #menu="nzDropdownMenu">
-  <ul nz-menu>
-    <li nz-menu-item>
-      <i nz-icon nzType="cloud-download" nzTheme="outline"></i>下载
-    </li>
-    <li nz-menu-item>
-      <i nz-icon nzType="share-alt" nzTheme="outline"></i>分享
-    </li>
-    <li nz-menu-item><i nz-icon nzType="edit" nzTheme="outline"></i>重命名</li>
-    <li nz-menu-item>
-      <i nz-icon nzType="scissor" nzTheme="outline"></i>移动到
-    </li>
-    <li nz-menu-divider></li>
-    <li nz-menu-item>
-      <i nz-icon nzType="delete" nzTheme="twotone" nzTwotoneColor="#f5222d"></i
-      >删除
-    </li>
-  </ul>
-</nz-dropdown-menu>
+      <!-- <nz-empty></nz-empty> -->
 
-<!-- <nz-empty></nz-empty> -->
+      <nz-table
+        nzTableLayout="fixed"
+        [nzData]="currentNodes"
+        [nzFrontPagination]="false"
+        [nzShowPagination]="false"
+        [nzLoading]="isLoading"
+        [nzScroll]="{ y: 'calc(100vh - 251px)' }"
+      >
+        <thead (nzSortChange)="sort($event)">
+          <tr>
+            <th nzShowCheckbox nzWidth="60px"></th>
+            <th nzShowSort nzWidth="100%">名称</th>
+            <th nzShowSort nzWidth="200px">上次修改时间</th>
+            <th nzShowSort nzWidth="200px">大小</th>
+          </tr>
+        </thead>
 
-<nz-table
-  nzTableLayout="fixed"
-  [nzData]="currentNodes"
-  [nzFrontPagination]="false"
-  [nzShowPagination]="false"
-  [nzLoading]="isLoading"
-  [nzScroll]="{ y: 'calc(100vh - 251px)' }"
->
-  <thead (nzSortChange)="sort($event)">
-    <tr>
-      <th nzShowCheckbox nzWidth="60px"></th>
-      <th nzShowSort nzWidth="100%">名称</th>
-      <th nzShowSort nzWidth="200px">上次修改时间</th>
-      <th nzShowSort nzWidth="200px">大小</th>
-    </tr>
-  </thead>
+        <tbody
+          (dragover)="dragOver($event)"
+          (dragenter)="dragOver($event)"
+          (dragleave)="dragLeave($event)"
+        >
+          <tr
+            *ngFor="let data of currentNodes"
+            draggable="true"
+            (dragstart)="drag($event, data)"
+            (drop)="drop($event)"
+            (contextmenu)="contextMenu($event, menu)"
+          >
+            <td nzShowCheckbox></td>
 
-  <tbody
-    (dragover)="dragOver($event)"
-    (dragenter)="dragOver($event)"
-    (dragleave)="dragLeave($event)"
-  >
-    <tr
-      *ngFor="let data of currentNodes"
-      draggable="true"
-      (dragstart)="drag($event, data)"
-      (drop)="drop($event)"
-      (contextmenu)="contextMenu($event, menu)"
-    >
-      <td nzShowCheckbox></td>
+            <td class="td-filename" id="ghostimage">
+              <i nz-icon (click)="openFolder(data.id)">
+                <img
+                  [ngClass]="getIconClass(data, dragOverItemId === data.id)"
+                  *ngIf="data.header !== 'img'"
+                />
+                <img
+                  [src]="environment.apiServer + '/file/thumbnail/' + data.id"
+                  *ngIf="data.header === 'img'"
+                />
+              </i>
+              <span (click)="openFolder(data.id)">{{ data.dataBox.name }}</span>
+            </td>
+            <td>{{ data.dataBox.updateTime }}</td>
+            <td>{{ data.header }}</td>
+          </tr>
+        </tbody>
+      </nz-table>
 
-      <td class="td-filename" id="ghostimage">
-        <i nz-icon (click)="openFolder(data.id)">
-          <img
-            [ngClass]="getIconClass(data, dragOverItemId === data.id)"
-            *ngIf="data.header !== 'img'"
-          />
-          <img
-            [src]="environment.apiServer + '/file/thumbnail/' + data.id"
-            *ngIf="data.header === 'img'"
-          />
-        </i>
-        <span (click)="openFolder(data.id)">{{ data.dataBox.name }}</span>
-      </td>
-      <td>{{ data.dataBox.updateTime }}</td>
-      <td>{{ data.header }}</td>
-    </tr>
-  </tbody>
-</nz-table>
-
-<!-- Root element of PhotoSwipe. Must have class pswp. -->
-<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true" #photoSwipe>
-  <!-- Background of PhotoSwipe.
+      <!-- Root element of PhotoSwipe. Must have class pswp. -->
+      <div
+        class="pswp"
+        tabindex="-1"
+        role="dialog"
+        aria-hidden="true"
+        #photoSwipe
+      >
+        <!-- Background of PhotoSwipe.
          It's a separate element as animating opacity is faster than rgba(). -->
-  <div class="pswp__bg"></div>
+        <div class="pswp__bg"></div>
 
-  <!-- Slides wrapper with overflow:hidden. -->
-  <div class="pswp__scroll-wrap">
-    <!-- Container that holds slides.
+        <!-- Slides wrapper with overflow:hidden. -->
+        <div class="pswp__scroll-wrap">
+          <!-- Container that holds slides.
             PhotoSwipe keeps only 3 of them in the DOM to save memory.
             Don't modify these 3 pswp__item elements, data is added later on. -->
-    <div class="pswp__container">
-      <div class="pswp__item"></div>
-      <div class="pswp__item"></div>
-      <div class="pswp__item"></div>
-    </div>
+          <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+          </div>
 
-    <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
-    <div class="pswp__ui pswp__ui--hidden">
-      <div class="pswp__top-bar">
-        <!--  Controls are self-explanatory. Order can be changed. -->
+          <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+          <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+              <!--  Controls are self-explanatory. Order can be changed. -->
 
-        <div class="pswp__counter"></div>
+              <div class="pswp__counter"></div>
 
-        <button
-          class="pswp__button pswp__button--close"
-          title="Close (Esc)"
-        ></button>
+              <button
+                class="pswp__button pswp__button--close"
+                title="Close (Esc)"
+              ></button>
 
-        <!-- <button class="pswp__button pswp__button--share" title="Share"></button> -->
+              <!-- <button class="pswp__button pswp__button--share" title="Share"></button> -->
 
-        <button
-          class="pswp__button pswp__button--fs"
-          title="Toggle fullscreen"
-        ></button>
+              <button
+                class="pswp__button pswp__button--fs"
+                title="Toggle fullscreen"
+              ></button>
 
-        <button
-          class="pswp__button pswp__button--zoom"
-          title="Zoom in/out"
-        ></button>
+              <button
+                class="pswp__button pswp__button--zoom"
+                title="Zoom in/out"
+              ></button>
 
-        <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
-        <!-- element will get class pswp__preloader--active when preloader is running -->
-        <div class="pswp__preloader">
-          <div class="pswp__preloader__icn">
-            <div class="pswp__preloader__cut">
-              <div class="pswp__preloader__donut"></div>
+              <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+              <!-- element will get class pswp__preloader--active when preloader is running -->
+              <div class="pswp__preloader">
+                <div class="pswp__preloader__icn">
+                  <div class="pswp__preloader__cut">
+                    <div class="pswp__preloader__donut"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"
+            >
+              <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button
+              class="pswp__button pswp__button--arrow--left"
+              title="Previous (arrow left)"
+            ></button>
+
+            <button
+              class="pswp__button pswp__button--arrow--right"
+              title="Next (arrow right)"
+            ></button>
+
+            <div class="pswp__caption">
+              <div class="pswp__caption__center"></div>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-        <div class="pswp__share-tooltip"></div>
-      </div>
-
-      <button
-        class="pswp__button pswp__button--arrow--left"
-        title="Previous (arrow left)"
-      ></button>
-
-      <button
-        class="pswp__button pswp__button--arrow--right"
-        title="Next (arrow right)"
-      ></button>
-
-      <div class="pswp__caption">
-        <div class="pswp__caption__center"></div>
-      </div>
+      <div
+        style="
+          width: 100px;
+          height: 50px;
+          position: absolute;
+          background: green;
+          display: none;
+          z-index: 9999;
+        "
+        [ngStyle]="dragImageStyles"
+      ></div>
     </div>
-  </div>
-</div>
-
-<div
-  style="
-    width: 100px;
-    height: 50px;
-    position: absolute;
-    background: green;
-    display: none;
-    z-index: 9999;
-  "
-  [ngStyle]="dragImageStyles"
-></div>
+    <ng-template #uploadProgress let-items="data">
+      <nz-collapse [nzBordered]="false">
+        <nz-collapse-panel
+          nzHeader="上传中"
+          nzActive="true"
+          nzDisabled="false"
+          [ngStyle]="{ border: '0px' }"
+        >
+          <nz-list
+            [nzDataSource]="items"
+            [nzRenderItem]="item"
+            [nzItemLayout]="'horizontal'"
+            [nzLoading]="false"
+          >
+            <ng-template #item let-item>
+              <nz-list-item>
+                <nz-list-item-meta
+                  [nzTitle]="nzTitle"
+                  [nzAvatar]="item.thumbnail"
+                  [nzDescription]="nzDescription"
+                >
+                  <ng-template #nzTitle>
+                    {{ item.filename }}
+                  </ng-template>
+                  <ng-template #nzDescription>
+                    <nz-progress
+                      [nzPercent]="item.progress"
+                      [nzStatus]="item.status"
+                    ></nz-progress>
+                  </ng-template>
+                </nz-list-item-meta>
+              </nz-list-item>
+            </ng-template>
+          </nz-list>
+        </nz-collapse-panel>
+      </nz-collapse>
+    </ng-template>
+  </nz-content>
+</nz-layout>
